@@ -1,0 +1,100 @@
+Step 1: Foundational (Pick-list) Data Setup
+    Navigate to the "Configuration Hub" to create the following prerequisite data.
+    Metric Definitions (spMetricDEF):
+    M0000001 | Name: Quality Score | Category: Quality
+    M0000002 | Name: VOC UES Score | Category: Satisfaction
+    M0000003 | Name: Team Call Volume | Category: Productivity
+    M0000092 | Name: Release Rate | Category: Efficiency
+    Programs, Plan Groups, & Roles:
+    Program: PRG-001 | Name: All Savers
+    Plan Group: PLG-001 | Name: Billing & Enrollment (Belongs to All Savers)
+    Plan Group: PLG-002 | Name: PPO Outreach (Belongs to All Savers)
+    Role Group: ROL-001 | Name: Agent (Belongs to Billing & Enrollment)
+    Role Group: ROL-002 | Name: SME (Belongs to PPO Outreach)
+    Component Types (sysComponent):
+    Ensure MMA (Multi-Metric Achievement), KIK (Kicker), and SPA-PROJECT (Special Project Pay) exist.
+    Data Sources (plDataSource):
+    Ensure MM (MyMetrics) exists.
+Step 2: Create Dummy Plan 1 (Simple Multi-Metric Plan)
+    This plan has a single award determined by the lowest performance across two core metrics.
+    Click :star: NEW PLAN.
+    Wizard - Step 1:
+    Plan Name: Agent Core Performance Plan
+    Program: All Savers
+    Plan Group: Billing & Enrollment
+    Role Group: Agent
+    Click Create Plan & Configure. You are now in the Plan Editor.
+    General Info & Eligibility:
+    Add one eligibility rule: Market=300, Segment=370, Business Code=827.
+    Components Setup:
+    Add Component: MMA (Multi-Metric Achievement). Pay Period=QTR, Measurement Period=MTH.
+    Metrics Assignment:
+    Select Component: MMA.
+    Add Metric: Quality Score (M0000001), Source: MM.
+    Add Metric: VOC UES Score (M0000002), Source: MM.
+    Goal Tiers:
+    For Quality Score: TierID=TIER 01, TierMin=98.00, TierMax=9999.
+    For VOC UES Score: TierID=TIER 01, TierMin=95.00, TierMax=9999.
+    Awards Definition:
+    Go to the "Pay Per Component" tab.
+    Add Award: Component=MMA, TierID=TIER 01, AwardAmount=$400.00.
+    Save Draft.
+    Step 3: Create Dummy Plan 2 (Plan with a Kicker)
+    This plan adds a kicker that is dependent on the core metrics being met.
+Click :star: NEW PLAN.
+    Wizard - Step 1:
+    Plan Name: SME Outreach Plan
+    Program: All Savers
+    Plan Group: PPO Outreach
+    Role Group: SME
+    Click Create Plan & Configure.
+    Components Setup:
+    Add Component: MMA. Pay Period=QTR, Measurement Period=MTH.
+    Add Component: KIK. Pay Period=QTR, Measurement Period=MTH.
+    Metrics Assignment:
+    Select Component MMA:
+    Add Metric: Quality Score (M0000001), Source: MM.
+    Select Component KIK:
+    Add Metric: Team Call Volume (M0000003), Source: MM.
+    Goal Tiers:
+    For Quality Score: TierID=TIER 01, TierMin=99.00.
+    For Team Call Volume: TierID=TIER 01, TierMin=350.
+    Awards Definition:
+    Pay Per Component tab: Add award for MMA, Tier 1 = $300.00.
+    Pay Per Metric tab: Add award for Kicker metric Team Call Volume, Tier 1 = $100.00.
+    Kickers & Dependencies:
+    Select Kicker: Component=KIK, Metric=Team Call Volume.
+    Select Core Metrics it Depends On: Check the box for Quality Score (from the MMA component).
+    Save Draft.
+    Step 4: Create Dummy Plan 3 (Plan with "Either/Or" Metric & Special Project)
+    This plan tests the secondary metric logic and the full special project configuration.
+Click :star: NEW PLAN.
+Wizard - Step 1:
+    Plan Name: USP Team Project Plan
+    Program: All Savers
+    Plan Group: Billing & Enrollment
+    Role Group: Agent
+    Click Create Plan & Configure.
+    Components Setup:
+    Add Component: MMA.
+    Metrics Assignment:
+    Select Component MMA:
+    Add a row with the following:
+    Metric Name: VOC UES Score (M0000002), Source: MM
+    Secondary Metric: Release Rate (M0000092)
+    Secondary Source: MM
+    Goal Tiers:
+    For VOC UES Score: TierID=TIER 01, TierMin=96.00.
+    For Release Rate: TierID=TIER 01, TierMin=80.00.
+    Awards Definition:
+    Pay Per Component tab: Add award for MMA, Tier 1 = $400.00.
+    Special Projects:
+    Methodology Assignment:
+    Special Project Component: SPA-PROJECT.
+    Project Pay:
+    Project Pay Amount: $250.00.
+    Gatekeeper:
+    Gatekeeper Metric: Team Call Volume (M0000003).
+    Operator: <.
+    Value: 200.
+    Save Draft.
